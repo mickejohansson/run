@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.mikaeljohansson.run" >
+    package="org.mikaeljohansson.run">
 
     <uses-feature android:name="android.hardware.type.watch" />
 
     <application
+        android:name=".RunApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.DeviceDefault" >
+        android:theme="@android:style/Theme.DeviceDefault">
         <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/app_name" >
+            android:name=".ui.SpeedometerActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
