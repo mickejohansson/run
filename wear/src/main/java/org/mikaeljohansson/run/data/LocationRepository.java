@@ -1,13 +1,10 @@
 package org.mikaeljohansson.run.data;
 
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
-import org.mikaeljohansson.run.RunApplication;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -41,7 +38,7 @@ public class LocationRepository {
                     @Override
                     public void onProviderDisabled(String s) {
                     }
-                };
+                });
             }
         });
     }
