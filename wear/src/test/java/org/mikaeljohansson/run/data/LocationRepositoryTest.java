@@ -10,6 +10,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import rx.Observable;
 import rx.functions.Action1;
 
 import static org.mockito.Matchers.anyFloat;
@@ -31,10 +32,11 @@ public class LocationRepositoryTest {
     }
 
     @Test
-    public void onLocationUpdate_notifySubscribers() {
+    public void onGetLocationObservable_startListeningForLocation() {
         ArgumentCaptor<LocationListener> locationListener = ArgumentCaptor.forClass(LocationListener.class);
 
-        mLocationRepository.getLocationObservable().subscribe(new Action1<Location>() {
+        Observable<Location> locationObservable = mLocationRepository.getLocationObservable();
+        locationObservable.subscribe(new Action1<Location>() {
             @Override
             public void call(Location location) {
             }
