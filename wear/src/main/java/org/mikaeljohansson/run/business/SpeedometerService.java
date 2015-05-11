@@ -1,10 +1,7 @@
 package org.mikaeljohansson.run.business;
 
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 
-import org.mikaeljohansson.run.RunApplication;
 import org.mikaeljohansson.run.data.LocationRepository;
 
 import rx.Observable;
@@ -16,10 +13,7 @@ public class SpeedometerService {
     private final Observable<Location> mLocationObservable;
 
     private SpeedometerService() {
-        // TODO: Handle with dependency injection instead
-        LocationManager locationManager = (LocationManager) RunApplication.getAppContext().getSystemService(Context.LOCATION_SERVICE);
-
-        LocationRepository mLocationRepository = new LocationRepository(locationManager);
+        LocationRepository mLocationRepository = new LocationRepository();
         mLocationObservable = mLocationRepository.getLocationObservable();
     }
 

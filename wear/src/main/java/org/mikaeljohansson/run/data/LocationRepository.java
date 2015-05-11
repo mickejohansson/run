@@ -1,45 +1,62 @@
 package org.mikaeljohansson.run.data;
 
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
+import org.mikaeljohansson.run.RunApplication;
 
 import rx.Observable;
-import rx.Subscriber;
+import rx.subjects.PublishSubject;
 
-public class LocationRepository {
+public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private final LocationManager mLocationManager;
+    private final GoogleApiClient mGoogleApiClient;
+    private final PublishSubject<Location> mPublishSubject;
 
-    public LocationRepository(@NonNull LocationManager locationManager) {
-        mLocationManager = locationManager;
+    public LocationRepository() {
+        mGoogleApiClient = new GoogleApiClient.Builder(RunApplication.getAppContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        mGoogleApiClient.connect();
+
+        mPublishSubject = PublishSubject.create();
     }
 
     public Observable<Location> getLocationObservable() {
-        return Observable.create(new Observable.OnSubscribe<Location>() {
+        return mPublishSubject.asObservable();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(1000);
+        locationRequest.setFastestInterval(500);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, new LocationListener() {
             @Override
-            public void call(final Subscriber<? super Location> subscriber) {
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        subscriber.onNext(location);
-                    }
-
-                    @Override
-                    public void onStatusChanged(String s, int i, Bundle bundle) {
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String s) {
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String s) {
-                    }
-                });
+            public void onLocationChanged(Location location) {
+                mPublishSubject.onNext(location);
             }
         });
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        mPublishSubject.onError(new Exception("Connection failed: " + connectionResult.toString()));
     }
 }
