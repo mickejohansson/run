@@ -46,6 +46,7 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
             @Override
             public void onLocationChanged(Location location) {
                 mPublishSubject.onNext(location);
+                System.out.println("bbb hello");
             }
         });
     }
