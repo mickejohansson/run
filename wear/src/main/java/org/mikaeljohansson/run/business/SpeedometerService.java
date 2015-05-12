@@ -3,6 +3,7 @@ package org.mikaeljohansson.run.business;
 import android.location.Location;
 
 import org.mikaeljohansson.run.data.LocationRepository;
+import org.mikaeljohansson.run.data.LocationRepositoryWrapper;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -13,7 +14,7 @@ public class SpeedometerService {
     private final Observable<Location> mLocationObservable;
 
     private SpeedometerService() {
-        LocationRepository mLocationRepository = LocationRepository.getInstance();
+        LocationRepository mLocationRepository = LocationRepositoryWrapper.getLocationRepository();
         mLocationObservable = mLocationRepository.getLocationObservable();
     }
 
