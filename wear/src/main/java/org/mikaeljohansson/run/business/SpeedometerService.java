@@ -13,7 +13,7 @@ public class SpeedometerService {
     private final Observable<Location> mLocationObservable;
 
     private SpeedometerService() {
-        LocationRepository mLocationRepository = new LocationRepository();
+        LocationRepository mLocationRepository = LocationRepository.getInstance();
         mLocationObservable = mLocationRepository.getLocationObservable();
     }
 

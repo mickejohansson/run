@@ -16,10 +16,11 @@ import rx.subjects.PublishSubject;
 
 public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private static LocationRepository mInstance;
     private final GoogleApiClient mGoogleApiClient;
     private final PublishSubject<Location> mPublishSubject;
 
-    public LocationRepository() {
+    private LocationRepository() {
         mGoogleApiClient = new GoogleApiClient.Builder(RunApplication.getAppContext())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -29,6 +30,14 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
         mGoogleApiClient.connect();
 
         mPublishSubject = PublishSubject.create();
+    }
+
+    public static LocationRepository getInstance() {
+        if (mInstance == null) {
+            mInstance = new LocationRepository();
+        }
+
+        return mInstance;
     }
 
     public Observable<Location> getLocationObservable() {
