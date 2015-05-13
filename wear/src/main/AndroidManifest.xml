@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.mikaeljohansson.run">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ALLOW_MOCK_LOCATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
 
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-feature
