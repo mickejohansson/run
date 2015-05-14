@@ -56,8 +56,8 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
         PendingResult<Status> result = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                System.out.println("Getting location: " + location);
                 mPublishSubject.onNext(location);
-                System.out.println("bbb hello");
             }
         });
     }

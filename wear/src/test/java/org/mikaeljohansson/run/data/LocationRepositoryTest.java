@@ -28,7 +28,7 @@ public class LocationRepositoryTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        mLocationRepository = new LocationRepository(mLocationManager);
+        mLocationRepository = LocationRepository.getInstance();
     }
 
     @Test
