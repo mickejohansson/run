@@ -33,12 +33,10 @@ public class SpeedometerService {
         return mLocationObservable.buffer(4, 1).map(new Func1<List<Location>, Float>() {
             @Override
             public Float call(List<Location> locations) {
-                /*
                 System.out.println(locations.get(0).getLatitude() + ":" + locations.get(0).getLongitude());
                 System.out.println(locations.get(3).getLatitude() + ":" + locations.get(3).getLongitude());
                 System.out.println("dist:" + locations.get(0).distanceTo(locations.get(3)));
                 System.out.println("time:" + (locations.get(3).getTime() - locations.get(0).getTime()));
-                */
                 return locations.get(0).distanceTo(locations.get(3)) * 1000 / (locations.get(3).getTime() - locations.get(0).getTime());
             }
         });
