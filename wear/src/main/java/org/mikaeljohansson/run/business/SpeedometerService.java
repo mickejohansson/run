@@ -16,8 +16,9 @@ public class SpeedometerService {
     private final Observable<Location> mLocationObservable;
 
     private SpeedometerService() {
-        LocationRepository mLocationRepository = LocationRepositoryWrapper.getLocationRepository();
-        mLocationObservable = mLocationRepository.getLocationObservable();
+        LocationRepositoryWrapper locationRepositoryWrapper = new LocationRepositoryWrapper();
+        LocationRepository locationRepository = locationRepositoryWrapper.getLocationRepository();
+        mLocationObservable = locationRepository.getLocationObservable();
     }
 
     public static SpeedometerService getInstance() {
@@ -44,7 +45,16 @@ public class SpeedometerService {
     }
 
     public Observable<Float> getAverageSpeedObservable(int windowSize) {
-        return getCurrentSpeedObservable().window(windowSize).flatMap(new Func1<Observable<Float>, Observable<Float>>() {
+        return getCurrentSpeedObservable().window(windowSize, 1).flatMap(new Func1<Observable<Float>, Observable<Float>>() {
+            @Override
+            public Observable<Float> call(Observable<Float> window) {
+                return MathObservable.averageFloat(window);
+            }
+        });
+    }
+
+    public Observable<Float> getTotalAverageSpeedObservable(int windowSize) {
+        return getCurrentSpeedObservable().window(, 1).flatMap(new Func1<Observable<Float>, Observable<Float>>() {
             @Override
             public Observable<Float> call(Observable<Float> window) {
                 return MathObservable.averageFloat(window);

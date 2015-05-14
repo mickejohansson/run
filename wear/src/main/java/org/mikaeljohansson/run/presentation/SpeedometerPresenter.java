@@ -18,14 +18,14 @@ public class SpeedometerPresenter {
         mSpeedometerService.getCurrentSpeedObservable().subscribe(new Action1<Float>() {
             @Override
             public void call(Float speed) {
-                mPainter.setCurrentSpeed(speed * 16.6666667);
+                mPainter.setCurrentSpeed(1000 / (60 * speed));
             }
         });
 
         mSpeedometerService.getAverageSpeedObservable(10).subscribe(new Action1<Float>() {
             @Override
             public void call(Float speed) {
-                mPainter.setAverageSpeed(speed);
+                mPainter.setAverageSpeed(1000 / (60 * speed));
             }
         });
     }

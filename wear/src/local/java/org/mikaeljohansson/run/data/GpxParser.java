@@ -1,11 +1,6 @@
 package org.mikaeljohansson.run.data;
 
-import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
-import android.os.SystemClock;
 
 import org.mikaeljohansson.run.RunApplication;
 import org.xmlpull.v1.XmlPullParser;
@@ -17,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MockLocationTask extends AsyncTask {
+public class GpxParser {
 
     private static final String TRKPT = "trkpt";
     private static final String LAT = "lat";
@@ -25,15 +20,12 @@ public class MockLocationTask extends AsyncTask {
     private static final String MY_MOCK_PROVIDER = "MyMockProvider";
     private static final String TIME = "time";
 
-    private boolean mKeepGoing = true;
-    private ArrayList<Location> mLocations;
-
-    public MockLocationTask() {
-        mLocations = new ArrayList<>();
+    public static ArrayList<Location> parse(String gpxFilename) {
+        ArrayList<Location> locations = new ArrayList<>();
         InputStream inputStream = null;
 
         try {
-            inputStream = RunApplication.getAppContext().getAssets().open("run.gpx");
+            inputStream = RunApplication.getAppContext().getAssets().open(gpxFilename);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,7 +56,7 @@ public class MockLocationTask extends AsyncTask {
                 } else if (eventType == XmlPullParser.END_TAG) {
                     if (parser.getName().equals(TRKPT)) {
                         location.setTime(date.getTime());
-                        mLocations.add(location);
+                        locations.add(location);
                         location = null;
                     } else if (parser.getName().equals(TIME)) {
                         String dateString = text;
@@ -77,34 +69,7 @@ public class MockLocationTask extends AsyncTask {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
-    @Override
-    protected Object doInBackground(Object[] objects) {
-        LocationManager locationManager = (LocationManager) RunApplication.getAppContext().getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager.getProvider(MY_MOCK_PROVIDER) != null) {
-            locationManager.removeTestProvider(MY_MOCK_PROVIDER);
-        }
-        locationManager.addTestProvider(MY_MOCK_PROVIDER, false, false, false, false, false, false, false, Criteria.POWER_LOW, Criteria.ACCURACY_FINE);
-        locationManager.setTestProviderEnabled(MY_MOCK_PROVIDER, true);
-
-        int i = 0;
-        while (mKeepGoing) {
-            Location mockLocation = mLocations.get(i % (mLocations.size() - 1));
-
-            mockLocation.setAccuracy(Criteria.ACCURACY_FINE);
-            mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-            locationManager.setTestProviderLocation(MY_MOCK_PROVIDER, mockLocation);
-            System.out.println("setting location: " + mockLocation);
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            i++;
-        }
-        return null;
+        return locations;
     }
 }
