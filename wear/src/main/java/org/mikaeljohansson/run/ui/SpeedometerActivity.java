@@ -37,12 +37,12 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     }
 
     @Override
-    public void setCurrentSpeed(float speed) {
+    public void setCurrentSpeed(double speed) {
         mCurrentSpeedTextView.setText("Current: " + speed);
     }
 
     @Override
-    public void setAverageSpeed(float speed) {
+    public void setAverageSpeed(double speed) {
         mAverageSpeedTextView.setText("Average: " + speed);
     }
 }

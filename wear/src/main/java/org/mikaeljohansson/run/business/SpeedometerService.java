@@ -5,6 +5,8 @@ import android.location.Location;
 import org.mikaeljohansson.run.data.LocationRepository;
 import org.mikaeljohansson.run.data.LocationRepositoryWrapper;
 
+import java.util.List;
+
 import rx.Observable;
 import rx.functions.Func1;
 import rx.observables.MathObservable;
@@ -27,10 +29,10 @@ public class SpeedometerService {
     }
 
     public Observable<Float> getCurrentSpeedObservable() {
-        return mLocationObservable.map(new Func1<Location, Float>() {
+        return mLocationObservable.buffer(4, 1).map(new Func1<List<Location>, Float>() {
             @Override
-            public Float call(Location location) {
-                return location.getSpeed();
+            public Float call(List<Location> locations) {
+                return locations.get(0).distanceTo(locations.get(3)) * 1000 / (locations.get(3).getTime() - locations.get(0).getTime());
             }
         });
     }
