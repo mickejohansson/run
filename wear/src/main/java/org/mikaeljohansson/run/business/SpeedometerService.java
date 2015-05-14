@@ -52,13 +52,4 @@ public class SpeedometerService {
             }
         });
     }
-
-    public Observable<Float> getTotalAverageSpeedObservable(int windowSize) {
-        return getCurrentSpeedObservable().window(, 1).flatMap(new Func1<Observable<Float>, Observable<Float>>() {
-            @Override
-            public Observable<Float> call(Observable<Float> window) {
-                return MathObservable.averageFloat(window);
-            }
-        });
-    }
 }
