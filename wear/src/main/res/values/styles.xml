@@ -4,6 +4,7 @@
     <style name="SpeedText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">60sp</item>
+        <item name="android:textColor">#CC5490</item>
+        <item name="android:textSize">70sp</item>
     </style>
 </resources>
