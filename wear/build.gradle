@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 20
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "org.mikaeljohansson.run"
-        minSdkVersion 21
-        targetSdkVersion 22
+        minSdkVersion 20
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }

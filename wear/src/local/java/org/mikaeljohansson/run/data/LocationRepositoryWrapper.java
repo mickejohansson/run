@@ -45,9 +45,13 @@ public class LocationRepositoryWrapper implements GoogleApiClient.ConnectionCall
         final Runnable r = new Runnable() {
             public void run() {
                 Location mockLocation = mLocations.get(mCurrentLocationIndex);
-                System.out.println("Setting mock loc " + mockLocation);
                 mockLocation.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
                 mockLocation.setAccuracy(Criteria.ACCURACY_FINE);
+                if (mCurrentLocationIndex > 0) {
+                    Location previousLocation = mLocations.get(mCurrentLocationIndex - 1);
+                    mockLocation.setSpeed(1000 * mockLocation.distanceTo(previousLocation) / (mockLocation.getTime() - previousLocation.getTime()));
+                }
+                System.out.println("Setting mock loc " + mockLocation);
                 LocationServices.FusedLocationApi.setMockLocation(mGoogleApiClient, mockLocation);
                 mCurrentLocationIndex = (mCurrentLocationIndex + 1) % (mLocations.size() - 1);
                 handler.postDelayed(this, 1000);
