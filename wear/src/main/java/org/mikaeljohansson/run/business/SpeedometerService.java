@@ -37,7 +37,13 @@ public class SpeedometerService {
     }
 
     public Observable<Float> getAverageSpeedObservable(int windowSize) {
-        return getCurrentSpeedObservable().window(windowSize, 1).flatMap(new Func1<Observable<Float>, Observable<Float>>() {
+        return getCurrentSpeedObservable().filter(new Func1<Float, Boolean>() {
+            @Override
+            public Boolean call(Float speed) {
+                // Ignore speeds lower than 1 m/s.
+                return speed > 1.0f;
+            }
+        }).window(windowSize, 1).flatMap(new Func1<Observable<Float>, Observable<Float>>() {
             @Override
             public Observable<Float> call(Observable<Float> window) {
                 return MathObservable.averageFloat(window);
