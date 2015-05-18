@@ -6,6 +6,7 @@ import android.location.LocationManager;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mikaeljohansson.run.BaseTest;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -18,7 +19,7 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
-public class LocationRepositoryTest {
+public class LocationRepositoryTest extends BaseTest {
 
     @Mock
     LocationManager mLocationManager;
