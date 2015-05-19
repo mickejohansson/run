@@ -14,7 +14,7 @@ public class SpeedometerPresenter {
     public SpeedometerPresenter(@NonNull Painter painter) {
         mPainter = painter;
 
-        mSpeedometerService = SpeedometerService.getInstance();
+        mSpeedometerService = SpeedometerServiceFactory.getSpeedometerService();
         mSpeedometerService.getCurrentSpeedObservable().subscribe(new Action1<Float>() {
             @Override
             public void call(Float speed) {

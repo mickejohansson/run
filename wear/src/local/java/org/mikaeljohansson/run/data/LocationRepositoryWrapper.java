@@ -33,8 +33,7 @@ public class LocationRepositoryWrapper implements GoogleApiClient.ConnectionCall
     public LocationRepository getLocationRepository() {
         mLocations = GpxParser.parse("run.gpx");
 
-
-        return LocationRepository.getInstance();
+        return new LocationRepository();
     }
 
     @Override

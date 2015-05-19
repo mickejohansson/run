@@ -29,7 +29,7 @@ public class LocationRepositoryTest extends BaseTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        mLocationRepository = LocationRepository.getInstance();
+        mLocationRepository = new LocationRepository();
     }
 
     @Test

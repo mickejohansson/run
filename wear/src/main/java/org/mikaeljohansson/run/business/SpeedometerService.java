@@ -10,21 +10,15 @@ import rx.functions.Func1;
 import rx.observables.MathObservable;
 
 public class SpeedometerService {
-    private static SpeedometerService sInstance;
     private final Observable<Location> mLocationObservable;
 
-    private SpeedometerService() {
-        LocationRepositoryWrapper locationRepositoryWrapper = new LocationRepositoryWrapper();
+    public SpeedometerService(LocationRepositoryWrapper locationRepositoryWrapper) {
         LocationRepository locationRepository = locationRepositoryWrapper.getLocationRepository();
         mLocationObservable = locationRepository.getLocationObservable();
     }
 
-    public static SpeedometerService getInstance() {
-        if (sInstance == null) {
-            sInstance = new SpeedometerService();
-        }
-
-        return sInstance;
+    public SpeedometerService() {
+        this(new LocationRepositoryWrapper());
     }
 
     public Observable<Float> getCurrentSpeedObservable() {
