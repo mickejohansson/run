@@ -16,6 +16,7 @@ import rx.Observer;
 import rx.observers.TestObserver;
 import rx.subjects.PublishSubject;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -89,5 +90,38 @@ public class SpeedometerServiceTest extends BaseTest {
         mLocationSubject.onNext(mockLocation5);
 
         testObserver.assertReceivedOnNext(speeds);
+    }
+
+    @Test
+    public void onReceiveMultipleLocations_passOnDistance() {
+        Observer<Float> delegate = mock(Observer.class);
+        TestObserver<Float> testObserver = new TestObserver(delegate);
+        mSpeedometerService.getDistanceObservable().subscribe(testObserver);
+
+        Location mockLocation;
+        for (int i = 0; i < 10; i++) {
+            mockLocation = mock(Location.class);
+            when(mockLocation.distanceTo(any(Location.class))).thenReturn(50.0f);
+            mLocationSubject.onNext(mockLocation);
+        }
+
+        assert (testObserver.getOnNextEvents().size() == 10);
+    }
+
+    @Test
+    public void onReceiveTooCloseLocations_passOnFilteredDistances() {
+        Observer<Float> delegate = mock(Observer.class);
+        TestObserver<Float> testObserver = new TestObserver(delegate);
+        mSpeedometerService.getDistanceObservable().subscribe(testObserver);
+
+        Location mockLocation;
+        for (int i = 0; i < 4; i++) {
+            mockLocation = mock(Location.class);
+            when(mockLocation.distanceTo(any(Location.class))).thenReturn(5.0f);
+            mLocationSubject.onNext(mockLocation);
+        }
+
+        // We should just receive one event (only after having moved at least 20 meters)
+        assert (testObserver.getOnNextEvents().size() == 1);
     }
 }
