@@ -105,11 +105,28 @@ public class SpeedometerServiceTest extends BaseTest {
             mLocationSubject.onNext(mockLocation);
         }
 
-        assert (testObserver.getOnNextEvents().size() == 10);
+        assert (testObserver.getOnNextEvents().size() == 9);
     }
 
     @Test
-    public void onReceiveTooCloseLocations_passOnFilteredDistances() {
+    public void onReceiveLocations_whenDistanceIsFarEnough_passOnDistances() {
+        Observer<Float> delegate = mock(Observer.class);
+        TestObserver<Float> testObserver = new TestObserver(delegate);
+        mSpeedometerService.getDistanceObservable().subscribe(testObserver);
+
+        Location mockLocation;
+        for (int i = 0; i < 2; i++) {
+            mockLocation = mock(Location.class);
+            when(mockLocation.distanceTo(any(Location.class))).thenReturn(20.0f);
+            mLocationSubject.onNext(mockLocation);
+        }
+
+        // We should just receive one event (only after having moved at least 20 meters)
+        assert (testObserver.getOnNextEvents().size() == 1);
+    }
+
+    @Test
+    public void onReceiveTooCloseLocations_dontPassOnDistances() {
         Observer<Float> delegate = mock(Observer.class);
         TestObserver<Float> testObserver = new TestObserver(delegate);
         mSpeedometerService.getDistanceObservable().subscribe(testObserver);
@@ -117,11 +134,11 @@ public class SpeedometerServiceTest extends BaseTest {
         Location mockLocation;
         for (int i = 0; i < 4; i++) {
             mockLocation = mock(Location.class);
-            when(mockLocation.distanceTo(any(Location.class))).thenReturn(5.0f);
+            when(mockLocation.distanceTo(any(Location.class))).thenReturn(1.0f);
             mLocationSubject.onNext(mockLocation);
         }
 
         // We should just receive one event (only after having moved at least 20 meters)
-        assert (testObserver.getOnNextEvents().size() == 1);
+        assert (testObserver.getOnNextEvents().size() == 0);
     }
 }
