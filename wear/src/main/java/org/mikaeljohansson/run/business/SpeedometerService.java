@@ -50,7 +50,7 @@ public class SpeedometerService {
         });
     }
 
-    public Observable<Location> getFilteredLocatoinObservable() {
+    private Observable<Location> getFilteredLocatoinObservable() {
         return mLocationObservable.doOnNext(new Action1<Location>() {
 
             @Override

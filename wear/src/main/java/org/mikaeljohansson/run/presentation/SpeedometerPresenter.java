@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import org.mikaeljohansson.run.business.SpeedometerService;
 
 import rx.functions.Action1;
+import rx.observables.MathObservable;
 
 public class SpeedometerPresenter {
 
@@ -28,11 +29,20 @@ public class SpeedometerPresenter {
                 mPainter.setAverageSpeed(1000 / (60 * speed));
             }
         });
+
+        MathObservable.sumFloat(mSpeedometerService.getDistanceObservable()).subscribe(new Action1<Float>() {
+            @Override
+            public void call(Float distance) {
+                mPainter.setCurrentDistance(distance);
+            }
+        });
     }
 
     public interface Painter {
         void setCurrentSpeed(double speed);
 
         void setAverageSpeed(double speed);
+
+        void setCurrentDistance(float distance);
     }
 }

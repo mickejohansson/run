@@ -23,5 +23,11 @@
             style="@style/SpeedText"
             android:text="-.-"
             tools:text="3.5"/>
+
+        <TextView
+            android:id="@+id/current_distance"
+            style="@style/SpeedText"
+            android:text="-"
+            tools:text="306"/>
     </LinearLayout>
 </FrameLayout>
