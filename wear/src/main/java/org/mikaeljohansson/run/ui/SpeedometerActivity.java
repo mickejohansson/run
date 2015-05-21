@@ -19,6 +19,9 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     @InjectView(R.id.average_speed)
     TextView mAverageSpeedTextView;
 
+    @InjectView(R.id.current_distance)
+    TextView mCurrentDistanceTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,5 +49,10 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     public void setAverageSpeed(double speed) {
         String text = String.format("%.1f", speed);
         mAverageSpeedTextView.setText(text);
+    }
+
+    @Override
+    public void setCurrentDistance(float distance) {
+        mCurrentDistanceTextView.setText(Math.round(distance));
     }
 }
