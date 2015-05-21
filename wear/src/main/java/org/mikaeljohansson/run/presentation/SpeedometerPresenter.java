@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import org.mikaeljohansson.run.business.SpeedometerService;
 
 import rx.functions.Action1;
-import rx.observables.MathObservable;
+import rx.functions.Func2;
 
 public class SpeedometerPresenter {
 
@@ -30,7 +30,12 @@ public class SpeedometerPresenter {
             }
         });
 
-        MathObservable.sumFloat(mSpeedometerService.getDistanceObservable()).subscribe(new Action1<Float>() {
+        mSpeedometerService.getDistanceObservable().scan(new Func2<Float, Float, Float>() {
+            @Override
+            public Float call(Float float1, Float float2) {
+                return float1 + float2;
+            }
+        }).subscribe(new Action1<Float>() {
             @Override
             public void call(Float distance) {
                 mPainter.setCurrentDistance(distance);
