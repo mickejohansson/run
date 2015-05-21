@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mikaeljohansson.run.BaseTest;
 import org.mikaeljohansson.run.data.LocationRepository;
-import org.mikaeljohansson.run.data.LocationRepositoryWrapper;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
@@ -26,9 +25,6 @@ public class SpeedometerServiceTest extends BaseTest {
     SpeedometerService mSpeedometerService;
 
     @Mock
-    LocationRepositoryWrapper mLocationRepositoryWrapper;
-
-    @Mock
     LocationRepository mLocationRepository;
 
     PublishSubject<Location> mLocationSubject;
@@ -36,10 +32,9 @@ public class SpeedometerServiceTest extends BaseTest {
     @Before
     public void setThingsUp() {
         mLocationSubject = PublishSubject.create();
-        when(mLocationRepositoryWrapper.getLocationRepository()).thenReturn(mLocationRepository);
         when(mLocationRepository.getLocationObservable()).thenReturn(mLocationSubject.asObservable());
 
-        mSpeedometerService = new SpeedometerService(mLocationRepositoryWrapper);
+        mSpeedometerService = new SpeedometerService(mLocationRepository);
     }
 
     @Test
