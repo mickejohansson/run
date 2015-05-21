@@ -7,7 +7,7 @@
              tools:deviceIds="wear_square">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
@@ -15,18 +15,21 @@
         <TextView
             android:id="@+id/current_speed"
             style="@style/SpeedText"
+            android:layout_gravity="center_horizontal"
             android:text="-.-"
             tools:text="4.2"/>
 
         <TextView
             android:id="@+id/average_speed"
             style="@style/SpeedText"
+            android:layout_gravity="center_horizontal"
             android:text="-.-"
             tools:text="3.5"/>
 
         <TextView
             android:id="@+id/current_distance"
             style="@style/SpeedText"
+            android:layout_gravity="center_horizontal"
             android:text="-"
             tools:text="306"/>
     </LinearLayout>
