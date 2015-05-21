@@ -33,8 +33,10 @@ public class LocationRepository {
                 }
                 System.out.println("Setting mock loc " + mockLocation);
                 mPublishSubject.onNext(mockLocation);
+                long currentTime = mockLocation.getTime();
                 mCurrentLocationIndex = (mCurrentLocationIndex + 1) % (mLocations.size() - 1);
-                handler.postDelayed(this, 1000);
+                long nextTime = mLocations.get(mCurrentLocationIndex).getTime();
+                handler.postDelayed(this, nextTime - currentTime);
             }
         };
 
