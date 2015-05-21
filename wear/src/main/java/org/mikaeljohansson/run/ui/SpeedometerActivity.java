@@ -53,6 +53,7 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
 
     @Override
     public void setCurrentDistance(float distance) {
-        mCurrentDistanceTextView.setText(Math.round(distance));
+        String text = String.format("%d", Math.round(distance));
+        mCurrentDistanceTextView.setText(text);
     }
 }
