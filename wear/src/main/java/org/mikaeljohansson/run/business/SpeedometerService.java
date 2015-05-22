@@ -48,7 +48,7 @@ public class SpeedometerService {
         });
     }
 
-    private Observable<Location> getFilteredLocatoinObservable() {
+    private Observable<Location> getFilteredLocationObservable() {
         return mLocationObservable.doOnNext(new Action1<Location>() {
 
             @Override
@@ -71,7 +71,7 @@ public class SpeedometerService {
     }
 
     public Observable<Float> getDistanceObservable() {
-        return getFilteredLocatoinObservable().buffer(2, 1).map(new Func1<List<Location>, Float>() {
+        return getFilteredLocationObservable().buffer(2, 1).map(new Func1<List<Location>, Float>() {
             @Override
             public Float call(List<Location> locations) {
                 return locations.get(0).distanceTo(locations.get(1));

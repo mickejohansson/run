@@ -23,9 +23,6 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
 
     public LocationRepository() {
         mPublishSubject = PublishSubject.create();
-    }
-
-    public void connect(GoogleApiClient googleApiClient) {
         mGoogleApiClient = new GoogleApiClient.Builder(RunApplication.getAppContext())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -46,10 +43,11 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
         locationRequest.setFastestInterval(500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        System.out.println("aaa Requesting location updates");
         PendingResult<Status> result = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                System.out.println("Getting location: " + location);
+                System.out.println("aaa Getting location: " + location);
                 mPublishSubject.onNext(location);
             }
         });
@@ -62,6 +60,7 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        System.out.println("aaa connection failed");
         mPublishSubject.onError(new Exception("Connection failed: " + connectionResult.toString()));
     }
 }
