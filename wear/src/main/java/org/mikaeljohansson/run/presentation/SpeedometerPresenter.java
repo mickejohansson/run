@@ -13,6 +13,10 @@ public class SpeedometerPresenter {
         mPainter = painter;
 
         mSpeedometerService = SpeedometerServiceFactory.getSpeedometerService();
+
+        mSpeedometerService.getConnectionObservable()
+                .subscribe(isConnected -> onServiceStarted());
+
         mSpeedometerService.getCurrentSpeedObservable()
                 .subscribe(speed -> mPainter.setCurrentSpeed(minsPerKm(speed)));
 
@@ -24,11 +28,17 @@ public class SpeedometerPresenter {
                 .subscribe(distance -> mPainter.setCurrentDistance(distance));
     }
 
+    private void onServiceStarted() {
+        mPainter.hideConnectionOverlay();
+    }
+
     private double minsPerKm(Float meterPerSecond) {
         return 1000 / (60 * meterPerSecond);
     }
 
     public interface Painter {
+        void hideConnectionOverlay();
+
         void setCurrentSpeed(double speed);
 
         void setAverageSpeed(double speed);

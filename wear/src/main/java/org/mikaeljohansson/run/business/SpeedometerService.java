@@ -20,8 +20,15 @@ public class SpeedometerService {
         this(new LocationRepository());
     }
 
+    public Observable<Boolean> getConnectionObservable() {
+        return mLocationObservable
+                .first()
+                .map(location -> true);
+    }
+
     public Observable<Float> getCurrentSpeedObservable() {
-        return mLocationObservable.map(location -> location.getSpeed());
+        return mLocationObservable
+                .map(location -> location.getSpeed());
     }
 
     public Observable<Float> getAverageSpeedObservable(int windowSize) {

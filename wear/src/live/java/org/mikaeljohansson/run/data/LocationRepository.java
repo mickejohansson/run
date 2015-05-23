@@ -43,7 +43,6 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
         locationRequest.setFastestInterval(500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        System.out.println("aaa Requesting location updates");
         PendingResult<Status> result = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -55,12 +54,11 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        // Do nothing. The system will try to reconnect and onConnected will be called again.
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        System.out.println("aaa connection failed");
         mPublishSubject.onError(new Exception("Connection failed: " + connectionResult.toString()));
     }
 }

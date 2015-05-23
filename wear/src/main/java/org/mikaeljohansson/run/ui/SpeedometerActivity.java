@@ -3,6 +3,7 @@ package org.mikaeljohansson.run.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
+import android.view.View;
 import android.widget.TextView;
 
 import org.mikaeljohansson.run.R;
@@ -22,21 +23,23 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     @InjectView(R.id.current_distance)
     TextView mCurrentDistanceTextView;
 
+    @InjectView(R.id.layout_connection_overlay)
+    View mConnectionOverlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         WatchViewStub watchViewStub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        watchViewStub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-            @Override
-            public void onLayoutInflated(WatchViewStub watchViewStub) {
-                ButterKnife.inject(SpeedometerActivity.this);
-            }
-        });
-
+        watchViewStub.setOnLayoutInflatedListener(watchViewStub1 -> ButterKnife.inject(SpeedometerActivity.this));
 
         new SpeedometerPresenter(this);
+    }
+
+    @Override
+    public void hideConnectionOverlay() {
+        mConnectionOverlay.setVisibility(View.GONE);
     }
 
     @Override
