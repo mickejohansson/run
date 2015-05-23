@@ -4,9 +4,6 @@ import android.support.annotation.NonNull;
 
 import org.mikaeljohansson.run.business.SpeedometerService;
 
-import rx.functions.Action1;
-import rx.functions.Func2;
-
 public class SpeedometerPresenter {
 
     private final Painter mPainter;
@@ -16,31 +13,19 @@ public class SpeedometerPresenter {
         mPainter = painter;
 
         mSpeedometerService = SpeedometerServiceFactory.getSpeedometerService();
-        mSpeedometerService.getCurrentSpeedObservable().subscribe(new Action1<Float>() {
-            @Override
-            public void call(Float speed) {
-                mPainter.setCurrentSpeed(1000 / (60 * speed));
-            }
-        });
+        mSpeedometerService.getCurrentSpeedObservable()
+                .subscribe(speed -> mPainter.setCurrentSpeed(minsPerKm(speed)));
 
-        mSpeedometerService.getAverageSpeedObservable(10).subscribe(new Action1<Float>() {
-            @Override
-            public void call(Float speed) {
-                mPainter.setAverageSpeed(1000 / (60 * speed));
-            }
-        });
+        mSpeedometerService.getAverageSpeedObservable(10)
+                .subscribe(speed -> mPainter.setAverageSpeed(minsPerKm(speed)));
 
-        mSpeedometerService.getDistanceObservable().scan(new Func2<Float, Float, Float>() {
-            @Override
-            public Float call(Float float1, Float float2) {
-                return float1 + float2;
-            }
-        }).subscribe(new Action1<Float>() {
-            @Override
-            public void call(Float distance) {
-                mPainter.setCurrentDistance(distance);
-            }
-        });
+        mSpeedometerService.getDistanceObservable()
+                .scan((float1, float2) -> float1 + float2)
+                .subscribe(distance -> mPainter.setCurrentDistance(distance));
+    }
+
+    private double minsPerKm(Float meterPerSecond) {
+        return 1000 / (60 * meterPerSecond);
     }
 
     public interface Painter {
