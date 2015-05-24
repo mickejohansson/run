@@ -47,4 +47,31 @@
             android:text="@string/connecting"/>
 
     </FrameLayout>
+
+    <org.mikaeljohansson.run.widget.SnappingScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.mikaeljohansson.run.widget.FullscreenLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/red"/>
+
+            <org.mikaeljohansson.run.widget.FullscreenLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/blue"/>
+
+            <org.mikaeljohansson.run.widget.FullscreenLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/green"/>
+        </LinearLayout>
+    </org.mikaeljohansson.run.widget.SnappingScrollView>
+
 </RelativeLayout>
