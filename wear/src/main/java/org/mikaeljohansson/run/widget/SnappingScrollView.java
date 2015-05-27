@@ -31,11 +31,7 @@ public class SnappingScrollView extends ScrollView {
     }
 
     private void setup() {
-        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        mScreenHeight = size.y;
+        mScreenHeight = getScreenHeight();
 
         setOnTouchListener((view, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP ||
@@ -48,5 +44,17 @@ public class SnappingScrollView extends ScrollView {
             }
             return false;
         });
+    }
+
+    private int getScreenHeight() {
+        if (isInEditMode()) {
+            return 280;
+        } else {
+            WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            return size.y;
+        }
     }
 }

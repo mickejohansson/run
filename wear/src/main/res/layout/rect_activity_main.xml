@@ -6,48 +6,6 @@
                 tools:context=".MainActivity"
                 tools:deviceIds="wear_square">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/current_speed"
-            style="@style/SpeedText"
-            android:layout_gravity="center_horizontal"
-            android:text="-.-"
-            tools:text="4.2"/>
-
-        <TextView
-            android:id="@+id/average_speed"
-            style="@style/SpeedText"
-            android:layout_gravity="center_horizontal"
-            android:text="-.-"
-            tools:text="3.5"/>
-
-        <TextView
-            android:id="@+id/current_distance"
-            style="@style/SpeedText"
-            android:layout_gravity="center_horizontal"
-            android:text="-"
-            tools:text="306"/>
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/layout_connection_overlay"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/black">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/connecting"/>
-
-    </FrameLayout>
-
     <org.mikaeljohansson.run.widget.SnappingScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -60,12 +18,58 @@
             <org.mikaeljohansson.run.widget.FullscreenLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/red"/>
+                android:background="@color/blue">
+
+                <FrameLayout
+                    android:id="@+id/layout_connection_overlay"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@color/black">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/connecting"/>
+                </FrameLayout>
+
+            </org.mikaeljohansson.run.widget.FullscreenLayout>
+
 
             <org.mikaeljohansson.run.widget.FullscreenLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/blue"/>
+                android:background="@color/red">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/current_speed"
+                        style="@style/SpeedText"
+                        android:layout_gravity="center_horizontal"
+                        android:text="-.-"
+                        tools:text="4.2"/>
+
+                    <TextView
+                        android:id="@+id/average_speed"
+                        style="@style/SpeedText"
+                        android:layout_gravity="center_horizontal"
+                        android:text="-.-"
+                        tools:text="3.5"/>
+
+                    <TextView
+                        android:id="@+id/current_distance"
+                        style="@style/SpeedText"
+                        android:layout_gravity="center_horizontal"
+                        android:text="-"
+                        tools:text="306"/>
+                </LinearLayout>
+            </org.mikaeljohansson.run.widget.FullscreenLayout>
+
 
             <org.mikaeljohansson.run.widget.FullscreenLayout
                 android:layout_width="fill_parent"

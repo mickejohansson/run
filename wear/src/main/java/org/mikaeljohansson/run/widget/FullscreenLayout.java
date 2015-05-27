@@ -26,6 +26,9 @@ public class FullscreenLayout extends RelativeLayout {
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        setMeasuredDimension(size.x, size.y);
+
+        int measureSpecX = MeasureSpec.makeMeasureSpec(size.x, MeasureSpec.EXACTLY);
+        int measureSpecY = MeasureSpec.makeMeasureSpec(size.y, MeasureSpec.EXACTLY);
+        super.onMeasure(measureSpecX, measureSpecY);
     }
 }
