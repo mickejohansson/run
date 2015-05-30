@@ -3,7 +3,6 @@ package org.mikaeljohansson.run.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.wearable.view.WatchViewStub;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,8 +33,7 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        WatchViewStub watchViewStub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        watchViewStub.setOnLayoutInflatedListener(watchViewStub1 -> ButterKnife.inject(SpeedometerActivity.this));
+        ButterKnife.inject(SpeedometerActivity.this);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                         .setDefaultFontPath("fonts/Roboto-Regular.ttf")

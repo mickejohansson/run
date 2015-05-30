@@ -1,13 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.wearable.view.WatchViewStub
-    android:id="@+id/watch_view_stub"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:keepScreenOn="true"
-    app:rectLayout="@layout/rect_activity_main"
-    app:roundLayout="@layout/round_activity_main"
-    tools:context=".MainActivity"
-    tools:deviceIds="wear"></android.support.wearable.view.WatchViewStub>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                tools:context=".MainActivity"
+                tools:deviceIds="wear_square">
+
+    <org.mikaeljohansson.run.widget.SnappingScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.mikaeljohansson.run.widget.FullscreenLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#202020">
+
+                <FrameLayout
+                    android:id="@+id/layout_connection_overlay"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@color/black">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/connecting"/>
+                </FrameLayout>
+
+            </org.mikaeljohansson.run.widget.FullscreenLayout>
+
+
+            <org.mikaeljohansson.run.widget.FullscreenLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#202020">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/current_speed"
+                        style="@style/SpeedText"
+                        android:layout_width="fill_parent"
+                        android:gravity="center"
+                        android:text="-.-"
+                        tools:text="4.2"/>
+
+                    <TextView
+                        android:id="@+id/average_speed"
+                        style="@style/SpeedText"
+                        android:layout_width="fill_parent"
+                        android:gravity="center"
+                        android:text="-.-"
+                        tools:text="3.5"/>
+                </LinearLayout>
+            </org.mikaeljohansson.run.widget.FullscreenLayout>
+
+            <org.mikaeljohansson.run.widget.FullscreenLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#202020">
+
+                <TextView
+                    android:id="@+id/current_distance"
+                    style="@style/SpeedText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:text="0 m"
+                    tools:text="306"/>
+
+            </org.mikaeljohansson.run.widget.FullscreenLayout>
+        </LinearLayout>
+    </org.mikaeljohansson.run.widget.SnappingScrollView>
+
+</RelativeLayout>
