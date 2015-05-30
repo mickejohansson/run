@@ -1,6 +1,7 @@
 package org.mikaeljohansson.run.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
 import android.view.View;
@@ -11,6 +12,8 @@ import org.mikaeljohansson.run.presentation.SpeedometerPresenter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SpeedometerActivity extends Activity implements SpeedometerPresenter.Painter {
 
@@ -34,7 +37,18 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
         WatchViewStub watchViewStub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         watchViewStub.setOnLayoutInflatedListener(watchViewStub1 -> ButterKnife.inject(SpeedometerActivity.this));
 
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/Roboto-Regular.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+        );
+
         new SpeedometerPresenter(this);
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -56,7 +70,13 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
 
     @Override
     public void setCurrentDistance(float distance) {
-        String text = String.format("%d", Math.round(distance));
+        String text = "0 m";
+
+        if (distance >= 1000) {
+            text = String.format("%.1f km", distance / 1000);
+        } else {
+            text = String.format("%d m", Math.round(distance));
+        }
         mCurrentDistanceTextView.setText(text);
     }
 }

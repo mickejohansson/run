@@ -40,7 +40,7 @@ public class LocationRepository {
             }
         };
 
-        handler.postDelayed(r, 1000);
+        handler.postDelayed(r, 5000);
 
 
     }
