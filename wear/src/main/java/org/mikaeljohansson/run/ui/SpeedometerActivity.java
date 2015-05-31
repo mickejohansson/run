@@ -3,11 +3,16 @@ package org.mikaeljohansson.run.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.wearable.view.CircularButton;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateInterpolator;
 import android.widget.TextView;
 
 import org.mikaeljohansson.run.R;
 import org.mikaeljohansson.run.presentation.SpeedometerPresenter;
+import org.mikaeljohansson.run.widget.SnappingScrollView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -15,6 +20,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SpeedometerActivity extends Activity implements SpeedometerPresenter.Painter {
+
+    @InjectView(R.id.scroll_view)
+    SnappingScrollView mScrollView;
 
     @InjectView(R.id.current_speed)
     TextView mCurrentSpeedTextView;
@@ -25,8 +33,11 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     @InjectView(R.id.current_distance)
     TextView mCurrentDistanceTextView;
 
-    @InjectView(R.id.layout_connection_overlay)
-    View mConnectionOverlay;
+    @InjectView(R.id.loading_icon)
+    View mLoadingIcon;
+
+    @InjectView(R.id.start_workout_button)
+    CircularButton mStartWorkoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +52,19 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
                         .build()
         );
 
+        mScrollView.setScrollBlock(true);
+        mStartWorkoutButton.setOnClickListener(view -> {
+            mScrollView.goToScreen(1);
+        });
+
+        startLoadingAnimation();
+
         new SpeedometerPresenter(this);
+    }
+
+    private void startLoadingAnimation() {
+        Animation scale = AnimationUtils.loadAnimation(this, R.anim.loading);
+        mLoadingIcon.startAnimation(scale);
     }
 
     @Override
@@ -50,8 +73,19 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     }
 
     @Override
-    public void hideConnectionOverlay() {
-        mConnectionOverlay.setVisibility(View.GONE);
+    public void onServiceStarted() {
+        mLoadingIcon.clearAnimation();
+        showStartWorkoutButton();
+        mScrollView.setScrollBlock(false);
+    }
+
+    private void showStartWorkoutButton() {
+        mLoadingIcon.animate().scaleYBy(5).scaleXBy(5).setInterpolator(new AnticipateInterpolator()).setDuration(400).start();
+
+        Animation showWorkoutButtonAnimation = AnimationUtils.loadAnimation(this, R.anim.show_workout_button);
+        showWorkoutButtonAnimation.setStartOffset(300);
+        mStartWorkoutButton.setVisibility(View.VISIBLE);
+        mStartWorkoutButton.startAnimation(showWorkoutButtonAnimation);
     }
 
     @Override
