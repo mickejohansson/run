@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 public class SnappingScrollView extends ScrollView {
 
     private int mScreenHeight;
+    private boolean mBlockScrolling;
 
     public SnappingScrollView(Context context) {
         super(context);
@@ -34,6 +35,9 @@ public class SnappingScrollView extends ScrollView {
         mScreenHeight = getScreenHeight();
 
         setOnTouchListener((view, event) -> {
+            if (mBlockScrolling) {
+                return true;
+            }
             if (event.getAction() == MotionEvent.ACTION_UP ||
                     event.getAction() == MotionEvent.ACTION_CANCEL) {
                 int index = Math.round((getScrollY() + mScreenHeight / 2) / mScreenHeight);
@@ -60,5 +64,9 @@ public class SnappingScrollView extends ScrollView {
             display.getSize(size);
             return size.y;
         }
+    }
+
+    public void setScrollBlock(boolean block) {
+        mBlockScrolling = block;
     }
 }

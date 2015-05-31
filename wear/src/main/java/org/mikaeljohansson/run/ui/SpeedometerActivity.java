@@ -52,6 +52,7 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
                         .build()
         );
 
+        mScrollView.setScrollBlock(true);
         mStartWorkoutButton.setOnClickListener(view -> {
             mScrollView.goToScreen(1);
         });
@@ -75,6 +76,7 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     public void onServiceStarted() {
         mLoadingIcon.clearAnimation();
         showStartWorkoutButton();
+        mScrollView.setScrollBlock(false);
     }
 
     private void showStartWorkoutButton() {
