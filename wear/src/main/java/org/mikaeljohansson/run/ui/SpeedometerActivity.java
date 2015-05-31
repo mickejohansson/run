@@ -16,6 +16,9 @@ import org.mikaeljohansson.run.widget.SnappingScrollView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.android.view.OnClickEvent;
+import rx.android.view.ViewObservable;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -53,10 +56,6 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
         );
 
         mScrollView.setScrollBlock(true);
-        mStartWorkoutButton.setOnClickListener(view -> {
-            mScrollView.goToScreen(1);
-        });
-
         startLoadingAnimation();
 
         new SpeedometerPresenter(this);
@@ -70,6 +69,11 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public Observable<OnClickEvent> getStartButtonObservable() {
+        return ViewObservable.clicks(mStartWorkoutButton);
     }
 
     @Override
@@ -110,5 +114,17 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
             text = String.format("%d m", Math.round(distance));
         }
         mCurrentDistanceTextView.setText(text);
+    }
+
+    @Override
+    public void showSpeedometerScreen() {
+        mScrollView.goToScreen(1);
+    }
+
+    @Override
+    public void resetSpeedometerValues() {
+        mCurrentSpeedTextView.setText("-.-");
+        mAverageSpeedTextView.setText("-.-");
+        setCurrentDistance(0.0f);
     }
 }

@@ -4,10 +4,17 @@ import android.support.annotation.NonNull;
 
 import org.mikaeljohansson.run.business.SpeedometerService;
 
+import java.util.ArrayList;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.view.OnClickEvent;
+
 public class SpeedometerPresenter {
 
     private final Painter mPainter;
     private final SpeedometerService mSpeedometerService;
+    private ArrayList<Subscription> mSubscriptions = new ArrayList<>();
 
     public SpeedometerPresenter(@NonNull Painter painter) {
         mPainter = painter;
@@ -17,15 +24,34 @@ public class SpeedometerPresenter {
         mSpeedometerService.getConnectionObservable()
                 .subscribe(isConnected -> mPainter.onServiceStarted());
 
-        mSpeedometerService.getCurrentSpeedObservable()
+        mPainter.getStartButtonObservable().subscribe(onClickEvent -> subscribeToSpeedomater());
+    }
+
+    private void subscribeToSpeedomater() {
+        resetSubscriptions();
+
+        Subscription subscription = mSpeedometerService.getCurrentSpeedObservable()
                 .subscribe(speed -> mPainter.setCurrentSpeed(minsPerKm(speed)));
+        mSubscriptions.add(subscription);
 
-        mSpeedometerService.getAverageSpeedObservable(10)
+        subscription = mSpeedometerService.getAverageSpeedObservable(10)
                 .subscribe(speed -> mPainter.setAverageSpeed(minsPerKm(speed)));
+        mSubscriptions.add(subscription);
 
-        mSpeedometerService.getDistanceObservable()
+        subscription = mSpeedometerService.getDistanceObservable()
                 .scan((float1, float2) -> float1 + float2)
                 .subscribe(distance -> mPainter.setCurrentDistance(distance));
+        mSubscriptions.add(subscription);
+
+        mPainter.showSpeedometerScreen();
+    }
+
+    private void resetSubscriptions() {
+        for (Subscription subscription : mSubscriptions) {
+            subscription.unsubscribe();
+        }
+        mSubscriptions.clear();
+        mPainter.resetSpeedometerValues();
     }
 
     private double minsPerKm(Float meterPerSecond) {
@@ -33,6 +59,8 @@ public class SpeedometerPresenter {
     }
 
     public interface Painter {
+        Observable<OnClickEvent> getStartButtonObservable();
+
         void onServiceStarted();
 
         void setCurrentSpeed(double speed);
@@ -40,5 +68,9 @@ public class SpeedometerPresenter {
         void setAverageSpeed(double speed);
 
         void setCurrentDistance(float distance);
+
+        void showSpeedometerScreen();
+
+        void resetSpeedometerValues();
     }
 }
