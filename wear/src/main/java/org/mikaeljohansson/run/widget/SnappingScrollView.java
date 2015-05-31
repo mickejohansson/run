@@ -46,6 +46,10 @@ public class SnappingScrollView extends ScrollView {
         });
     }
 
+    public void goToScreen(int index) {
+        smoothScrollTo(getScrollX(), index * mScreenHeight);
+    }
+
     private int getScreenHeight() {
         if (isInEditMode()) {
             return 280;
