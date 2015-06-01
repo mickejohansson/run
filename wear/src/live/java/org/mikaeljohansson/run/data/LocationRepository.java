@@ -7,7 +7,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
@@ -43,12 +42,10 @@ public class LocationRepository implements GoogleApiClient.ConnectionCallbacks, 
         locationRequest.setFastestInterval(500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        PendingResult<Status> result = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                System.out.println("aaa Getting location: " + location);
-                mPublishSubject.onNext(location);
-            }
+        System.out.println("aaa Requesting location updates");
+        PendingResult<Status> result = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, location -> {
+            System.out.println("aaa Getting location: " + location);
+            mPublishSubject.onNext(location);
         });
     }
 
