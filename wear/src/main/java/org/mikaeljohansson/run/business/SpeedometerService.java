@@ -56,4 +56,8 @@ public class SpeedometerService {
                 .buffer(2, 1)
                 .map(locations -> locations.get(0).distanceTo(locations.get(1)));
     }
+
+    public Observable<Location> getLocationObservable() {
+        return mLocationObservable;
+    }
 }

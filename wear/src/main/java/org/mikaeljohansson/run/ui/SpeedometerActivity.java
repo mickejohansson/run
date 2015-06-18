@@ -42,6 +42,9 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     @InjectView(R.id.start_workout_button)
     CircularButton mStartWorkoutButton;
 
+    @InjectView(R.id.stop_workout_button)
+    View mStopWorkoutButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +77,11 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
     @Override
     public Observable<OnClickEvent> getStartButtonObservable() {
         return ViewObservable.clicks(mStartWorkoutButton);
+    }
+
+    @Override
+    public Observable<OnClickEvent> getStopButtonObservable() {
+        return ViewObservable.clicks(mStopWorkoutButton);
     }
 
     @Override
@@ -126,5 +134,15 @@ public class SpeedometerActivity extends Activity implements SpeedometerPresente
         mCurrentSpeedTextView.setText("-.-");
         mAverageSpeedTextView.setText("-.-");
         setCurrentDistance(0.0f);
+    }
+
+    @Override
+    public void showStopButton() {
+        mStopWorkoutButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideStopButton() {
+        mStopWorkoutButton.setVisibility(View.GONE);
     }
 }

@@ -6,6 +6,7 @@ import org.mikaeljohansson.run.RunApplication;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -71,5 +72,12 @@ public class GpxParser {
         }
 
         return locations;
+    }
+
+    public static void writeGpxFile(String fileName, ArrayList<Location> locations) {
+        FileWriter
+        for (Location location : locations) {
+            System.out.println(location.toString());
+        }
     }
 }
