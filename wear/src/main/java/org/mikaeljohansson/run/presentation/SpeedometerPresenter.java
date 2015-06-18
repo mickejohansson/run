@@ -34,7 +34,7 @@ public class SpeedometerPresenter {
     private void stopWorkout() {
         mPainter.hideStopButton();
 
-        GpxParser.writeGpxFile(new Date().toString(), WorkoutLog.getLog());
+        GpxParser.writeGpxFile(new Date().toString() + ".gpx", WorkoutLog.getLog());
         WorkoutLog.clear();
     }
 
