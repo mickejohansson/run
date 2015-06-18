@@ -9,6 +9,7 @@ import rx.observables.MathObservable;
 
 public class SpeedometerService {
     private static final float MIN_DISTANCE = 20;
+    private static final float MAX_ACCURACY_DEVIATION = 20;
     private final Observable<Location> mLocationObservable;
     Location mLastLocation = null;
 
@@ -40,13 +41,14 @@ public class SpeedometerService {
 
     private Observable<Location> getFilteredLocationObservable() {
         return mLocationObservable
+                .skipWhile(location -> location.getAccuracy() > MAX_ACCURACY_DEVIATION)
                 .doOnNext(location -> {
                     if (mLastLocation == null) {
                         mLastLocation = location;
                     }
                 })
                 .skipWhile(location -> location.distanceTo(mLastLocation) < MIN_DISTANCE)
-                .doOnNext(location -> mLastLocation = null);
+                .doOnNext(location -> mLastLocation = location);
     }
 
     public Observable<Float> getDistanceObservable() {
