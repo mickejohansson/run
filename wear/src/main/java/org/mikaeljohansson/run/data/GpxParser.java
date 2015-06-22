@@ -33,7 +33,7 @@ public class GpxParser {
         }
 
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
             parser.setInput(inputStream, null);
             int eventType = parser.getEventType();
