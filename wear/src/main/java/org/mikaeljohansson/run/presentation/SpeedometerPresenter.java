@@ -6,6 +6,7 @@ import org.mikaeljohansson.run.business.SpeedometerService;
 import org.mikaeljohansson.run.business.WorkoutLog;
 import org.mikaeljohansson.run.data.GpxParser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -18,6 +19,7 @@ public class SpeedometerPresenter {
     private final Painter mPainter;
     private final SpeedometerService mSpeedometerService;
     private ArrayList<Subscription> mSubscriptions = new ArrayList<>();
+    private long mStartTimeMillis;
 
     public SpeedometerPresenter(@NonNull Painter painter) {
         mPainter = painter;
@@ -34,11 +36,15 @@ public class SpeedometerPresenter {
     private void stopWorkout() {
         mPainter.hideStopButton();
 
-        GpxParser.writeGpxFile(new Date().toString() + ".gpx", WorkoutLog.getLog());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
+        String date = simpleDateFormat.format(new Date());
+
+        GpxParser.writeGpxFile(date + ".gpx", WorkoutLog.getLog());
         WorkoutLog.clear();
     }
 
     private void startWorkout() {
+        mStartTimeMillis = System.currentTimeMillis();
         resetSubscriptions();
 
         mPainter.showStopButton();
@@ -51,13 +57,12 @@ public class SpeedometerPresenter {
                 .subscribe(speed -> mPainter.setCurrentSpeed(minsPerKm(speed)));
         mSubscriptions.add(subscription);
 
-        subscription = mSpeedometerService.getAverageSpeedObservable(10)
-                .subscribe(speed -> mPainter.setAverageSpeed(minsPerKm(speed)));
-        mSubscriptions.add(subscription);
-
         subscription = mSpeedometerService.getDistanceObservable()
                 .scan((float1, float2) -> float1 + float2)
-                .subscribe(distance -> mPainter.setCurrentDistance(distance));
+                .subscribe(distance -> {
+                    mPainter.setCurrentDistance(distance);
+                    mPainter.setAverageSpeed(getElapsedTimeInMinutes() / (distance / 1000));
+                });
         mSubscriptions.add(subscription);
 
         mPainter.showSpeedometerScreen();
@@ -73,6 +78,14 @@ public class SpeedometerPresenter {
 
     private double minsPerKm(Float meterPerSecond) {
         return 1000 / (60 * meterPerSecond);
+    }
+
+    public long getElapsedTime() {
+        return System.currentTimeMillis() - mStartTimeMillis;
+    }
+
+    public float getElapsedTimeInMinutes() {
+        return getElapsedTime() / (1000.0f * 60);
     }
 
     public interface Painter {
