@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:keepScreenOn="true"
-                tools:context=".MainActivity"
-                tools:deviceIds="wear_square">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:keepScreenOn="true"
+    tools:context=".MainActivity"
+    tools:deviceIds="wear_square">
 
     <org.mikaeljohansson.run.widget.SnappingScrollView
         android:id="@+id/scroll_view"
@@ -27,16 +27,31 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
-                    android:background="#202020"/>
+                    android:background="#202020" />
 
-                <android.support.wearable.view.CircularButton
-                    android:id="@+id/start_workout_button"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:color="#F17693"
-                    android:visibility="gone"/>
+                    android:orientation="horizontal">
 
+                    <android.support.wearable.view.CircularButton
+                        android:id="@+id/start_workout_button"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="8dp"
+                        android:color="#F17693"
+                        android:visibility="gone" />
+
+                    <View
+                        android:id="@+id/stop_workout_button"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="8dp"
+                        android:background="#F17693"
+                        android:visibility="gone" />
+
+                </LinearLayout>
 
             </org.mikaeljohansson.run.widget.FullscreenLayout>
 
@@ -58,7 +73,7 @@
                         android:layout_width="fill_parent"
                         android:gravity="center"
                         android:text="-.-"
-                        tools:text="4.2"/>
+                        tools:text="4.2" />
 
                     <TextView
                         android:id="@+id/average_speed"
@@ -66,7 +81,7 @@
                         android:layout_width="fill_parent"
                         android:gravity="center"
                         android:text="-.-"
-                        tools:text="3.5"/>
+                        tools:text="3.5" />
                 </LinearLayout>
             </org.mikaeljohansson.run.widget.FullscreenLayout>
 
@@ -82,7 +97,7 @@
                     android:layout_height="fill_parent"
                     android:gravity="center"
                     android:text="0 m"
-                    tools:text="306"/>
+                    tools:text="306" />
 
             </org.mikaeljohansson.run.widget.FullscreenLayout>
         </LinearLayout>

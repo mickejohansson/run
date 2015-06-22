@@ -6,6 +6,8 @@ import org.mikaeljohansson.run.RunApplication;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -71,5 +73,42 @@ public class GpxParser {
         }
 
         return locations;
+    }
+
+    public static void writeGpxFile(String fileName, ArrayList<Location> locations) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        File file = new File(RunApplication.getAppContext().getFilesDir(), fileName);
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            writeLine(fileWriter, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>");
+            writeLine(fileWriter, "<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"org.mikaeljohansson.run\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">");
+            writeLine(fileWriter, "<trk>");
+            writeLine(fileWriter, "<name>Workout</name>");
+            writeLine(fileWriter, "<trkseg>");
+            for (Location location : locations) {
+                writeLine(fileWriter, "<trkpt lat=\"" + location.getLatitude() + "\" lon=\"" + location.getLongitude() + "\">");
+                writeLine(fileWriter, "<ele>" + location.getAltitude() + "</ele>");
+                String timeString = simpleDateFormat.format(new Date(location.getTime()));
+                writeLine(fileWriter, "<time>" + timeString + "</time>");
+                writeLine(fileWriter, "</trkpt>");
+            }
+            writeLine(fileWriter, "</trkseg>");
+            writeLine(fileWriter, "</trk>");
+            writeLine(fileWriter, "</gpx>");
+
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeLine(FileWriter fileWriter, String s) {
+        try {
+            System.out.println(s);
+            fileWriter.write(s);
+            fileWriter.write("\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

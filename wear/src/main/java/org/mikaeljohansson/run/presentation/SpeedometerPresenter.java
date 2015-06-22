@@ -3,8 +3,11 @@ package org.mikaeljohansson.run.presentation;
 import android.support.annotation.NonNull;
 
 import org.mikaeljohansson.run.business.SpeedometerService;
+import org.mikaeljohansson.run.business.WorkoutLog;
+import org.mikaeljohansson.run.data.GpxParser;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import rx.Observable;
 import rx.Subscription;
@@ -24,13 +27,27 @@ public class SpeedometerPresenter {
         mSpeedometerService.getConnectionObservable()
                 .subscribe(isConnected -> mPainter.onServiceStarted());
 
-        mPainter.getStartButtonObservable().subscribe(onClickEvent -> subscribeToSpeedomater());
+        mPainter.getStartButtonObservable().subscribe(onClickEvent -> startWorkout());
+        mPainter.getStopButtonObservable().subscribe(onClickEvent -> stopWorkout());
     }
 
-    private void subscribeToSpeedomater() {
+    private void stopWorkout() {
+        mPainter.hideStopButton();
+
+        GpxParser.writeGpxFile(new Date().toString() + ".gpx", WorkoutLog.getLog());
+        WorkoutLog.clear();
+    }
+
+    private void startWorkout() {
         resetSubscriptions();
 
-        Subscription subscription = mSpeedometerService.getCurrentSpeedObservable()
+        mPainter.showStopButton();
+
+        Subscription subscription = mSpeedometerService.getLocationObservable()
+                .subscribe(location -> WorkoutLog.add(location));
+        mSubscriptions.add(subscription);
+
+        subscription = mSpeedometerService.getCurrentSpeedObservable()
                 .subscribe(speed -> mPainter.setCurrentSpeed(minsPerKm(speed)));
         mSubscriptions.add(subscription);
 
@@ -61,6 +78,8 @@ public class SpeedometerPresenter {
     public interface Painter {
         Observable<OnClickEvent> getStartButtonObservable();
 
+        Observable<OnClickEvent> getStopButtonObservable();
+
         void onServiceStarted();
 
         void setCurrentSpeed(double speed);
@@ -72,5 +91,9 @@ public class SpeedometerPresenter {
         void showSpeedometerScreen();
 
         void resetSpeedometerValues();
+
+        void showStopButton();
+
+        void hideStopButton();
     }
 }
