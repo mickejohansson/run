@@ -1,6 +1,7 @@
 package org.mikaeljohansson.run.data;
 
 import android.location.Location;
+import android.os.Environment;
 
 import org.mikaeljohansson.run.RunApplication;
 import org.xmlpull.v1.XmlPullParser;
@@ -77,7 +78,7 @@ public class GpxParser {
 
     public static void writeGpxFile(String fileName, ArrayList<Location> locations) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        File file = new File(RunApplication.getAppContext().getFilesDir(), fileName);
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
         try {
             FileWriter fileWriter = new FileWriter(file);
             writeLine(fileWriter, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>");
